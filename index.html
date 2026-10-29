@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full">
+<html lang="en" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organize Study routine - Seu Organizador de Rotina de Estudos</title>
+    <title>Organize Study routine</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -23,1020 +20,726 @@
                             600: '#2563eb',
                             700: '#1d4ed8',
                         }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <style>
-        /* Estilização para scrollbar personalizada */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(156, 163, 175, 0.5);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(107, 114, 128, 0.8);
-        }
-    </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col font-sans transition-colors duration-200">
+<body class="h-full text-slate-800 flex flex-col font-sans antialiased">
 
-    <!-- Header / Navbar -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm">
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo & Titulo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md">
+                        <i data-lucide="book-open-check" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">Organize Study routine</span>
-                        <span class="hidden sm:inline-block text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full ml-2 font-medium">Rotina & Foco</span>
+                        <h1 class="font-bold text-slate-900 text-lg leading-none">Organize Study routine</h1>
+                        <p class="text-xs text-slate-500 mt-1">Smart Planner & Pomodoro Timer</p>
                     </div>
                 </div>
 
-                <!-- Modos & Ações rápidas -->
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <button id="toggle-dark" class="p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Alternar Tema Dark/Light">
-                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
-                        <i class="fa-solid fa-sun text-lg hidden dark:block"></i>
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1 bg-slate-100 p-1 rounded-xl">
+                    <button onclick="switchTab('subjects')" id="nav-subjects" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 bg-white text-slate-900 shadow-sm">
+                        <i data-lucide="book-open" class="w-4 h-4"></i> Subjects & Exams
                     </button>
-                    <button id="btn-reset-data" class="text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 p-2 rounded-lg border border-rose-200 dark:border-rose-800 transition" title="Resetar dados armazenados">
-                        <i class="fa-solid fa-trash-arrow-up mr-1"></i> Reiniciar Dados
+                    <button onclick="switchTab('schedule')" id="nav-schedule" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Study Schedule
+                    </button>
+                    <button onclick="switchTab('timer')" id="nav-timer" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                        <i data-lucide="timer" class="w-4 h-4"></i> Pomodoro Timer
+                    </button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Progress
+                    </button>
+                    <button onclick="switchTab('tips')" id="nav-tips" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                        <i data-lucide="lightbulb" class="w-4 h-4"></i> Study Tips
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('subjects'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5"></i> Subjects & Exams
+            </button>
+            <button onclick="switchTab('schedule'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i data-lucide="calendar" class="w-5 h-5"></i> Study Schedule
+            </button>
+            <button onclick="switchTab('timer'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i data-lucide="timer" class="w-5 h-5"></i> Pomodoro Timer
+            </button>
+            <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Progress
+            </button>
+            <button onclick="switchTab('tips'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i> Study Tips
+            </button>
+        </div>
     </header>
 
-    <!-- Main Body Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
 
-        <!-- Sidebar Esquerda: Painel de Configurações, Matérias e Provas (4 Cols no Desktop) -->
-        <section class="lg:col-span-4 space-y-6">
-            
-            <!-- Card 1: Horas Disponíveis -->
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700">
-                <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
-                    <i class="fa-regular fa-clock text-blue-500"></i> Disponibilidade Diária
-                </h2>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Dias Úteis (Seg-Sex)</label>
-                        <div class="relative">
-                            <input type="number" id="input-hours-weekday" min="0.5" max="16" step="0.5" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" value="3">
-                            <span class="absolute right-3 top-2 text-xs text-slate-400">horas/dia</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Fim de Semana</label>
-                        <div class="relative">
-                            <input type="number" id="input-hours-weekend" min="0" max="16" step="0.5" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" value="5">
-                            <span class="absolute right-3 top-2 text-xs text-slate-400">horas/dia</span>
-                        </div>
-                    </div>
-                </div>
-                <button id="btn-save-hours" class="mt-3 w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-xs font-medium py-2 rounded-xl text-slate-700 dark:text-slate-200 transition">
-                    Atualizar Disponibilidade
-                </button>
-            </div>
-
-            <!-- Card 2: Cadastro de Matérias -->
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700">
-                <h2 class="text-lg font-semibold flex items-center gap-2 mb-3">
-                    <i class="fa-solid fa-book-open text-indigo-500"></i> Cadastrar Matéria
-                </h2>
-                <form id="form-subject" class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Nome da Matéria</label>
-                        <input type="text" id="subj-name" required placeholder="Ex: Matemática, História..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
+        <!-- TAB 1: SUBJECTS & EXAMS -->
+        <section id="tab-subjects" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Add Subject Form -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h2 class="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="plus-circle" class="w-5 h-5 text-brand-600"></i> Add Subject / Exam
+                    </h2>
                     
-                    <div class="grid grid-cols-2 gap-3">
+                    <form id="subject-form" onsubmit="handleAddSubject(event)" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Dificuldade (1 a 5)</label>
-                            <select id="subj-difficulty" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="1">1 - Muito Fácil</option>
-                                <option value="2">2 - Fácil</option>
-                                <option value="3" selected>3 - Média</option>
-                                <option value="4">4 - Difícil</option>
-                                <option value="5">5 - Muito Difícil</option>
-                            </select>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Subject Name</label>
+                            <input type="text" id="subject-name" required placeholder="e.g., Mathematics, Physics, History" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
                         </div>
+
                         <div>
-                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Peso/Importância</label>
-                            <select id="subj-weight" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="1">Baixo (1x)</option>
-                                <option value="2" selected>Médio (2x)</option>
-                                <option value="3">Alto (3x)</option>
-                            </select>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Exam Date</label>
+                            <input type="date" id="subject-exam-date" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
                         </div>
-                    </div>
 
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Cor de Identificação</label>
-                        <div class="flex gap-2" id="color-picker-container">
-                            <!-- Opções de cores geradas dinamicamente via JS -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Difficulty Level</label>
+                                <select id="subject-difficulty" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                                    <option value="1">1 - Easy</option>
+                                    <option value="2">2 - Moderate</option>
+                                    <option value="3" selected>3 - Medium</option>
+                                    <option value="4">4 - Hard</option>
+                                    <option value="5">5 - Very Hard</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Exam Weight / Priority</label>
+                                <select id="subject-weight" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                                    <option value="1">Low</option>
+                                    <option value="2" selected>Medium</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
                         </div>
-                        <input type="hidden" id="subj-color" value="#3b82f6">
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Topics / Checklist (Comma separated)</label>
+                            <textarea id="subject-topics" rows="2" placeholder="e.g., Algebra, Trigonometry, Geometry" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Save Subject
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Subjects List -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-slate-900">Registered Subjects</h2>
+                        <span id="subject-count" class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">0 Subjects</span>
                     </div>
 
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus text-xs"></i> Adicionar Matéria
-                    </button>
-                </form>
-            </div>
-
-            <!-- Card 3: Cadastro de Provas -->
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700">
-                <h2 class="text-lg font-semibold flex items-center gap-2 mb-3">
-                    <i class="fa-regular fa-calendar-check text-emerald-500"></i> Agendar Prova / Exame
-                </h2>
-                <form id="form-exam" class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Matéria</label>
-                        <select id="exam-subject-select" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                            <!-- Preenchido via JS -->
-                        </select>
+                    <div id="subjects-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Dynamic Cards will be rendered here -->
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Data da Prova</label>
-                        <input type="date" id="exam-date" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Título/Conteúdo da Avaliação</label>
-                        <input type="text" id="exam-title" placeholder="Ex: Prova Mensal - Cap. 1 a 4" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-calendar-plus text-xs"></i> Salvar Prova
-                    </button>
-                </form>
-            </div>
-
-            <!-- Lista de Matérias Cadastradas -->
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700">
-                <h3 class="font-semibold text-sm text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center">
-                    <span>Minhas Matérias</span>
-                    <span id="subject-count" class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-500">0</span>
-                </h3>
-                <div id="subjects-list" class="space-y-2 max-h-56 overflow-y-auto pr-1">
-                    <!-- Lista dinâmica de matérias -->
                 </div>
             </div>
-
         </section>
 
-        <!-- Área Principal Direita: Dashboard, Cronograma & Pomodoro (8 Cols no Desktop) -->
-        <section class="lg:col-span-8 space-y-6">
-
-            <!-- Painel Superior: Provas Próximas & Métricas Rápida -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Prova Mais Próxima Badge -->
-                <div class="md:col-span-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 rounded-2xl shadow-md flex flex-col justify-between relative overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 opacity-10 text-8xl pointer-events-none">
-                        <i class="fa-solid fa-bullseye"></i>
-                    </div>
-                    <div class="flex justify-between items-start z-10">
-                        <span class="text-xs uppercase tracking-wider font-semibold text-blue-200">Próxima Avaliação</span>
-                        <span id="next-exam-badge" class="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold">--</span>
-                    </div>
-                    <div class="my-3 z-10">
-                        <h3 id="next-exam-title" class="text-xl font-bold">Nenhuma prova agendada</h3>
-                        <p id="next-exam-sub" class="text-xs text-blue-100 opacity-90 mt-1">Cadastre provas para otimizar seu plano de estudos automaticamente.</p>
-                    </div>
-                    <div class="flex items-center text-xs text-blue-200 z-10" id="next-exam-date">
-                        <i class="fa-regular fa-clock mr-1.5"></i> --
-                    </div>
-                </div>
-
-                <!-- Card Tempo Total Estudado -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Tempo Estudado Total</span>
-                    <div class="my-2">
-                        <div class="text-3xl font-bold text-slate-800 dark:text-white" id="total-study-time">0h 0m</div>
-                        <p class="text-xs text-emerald-500 flex items-center gap-1 mt-1 font-medium">
-                            <i class="fa-solid fa-bolt"></i> Acumulado em sessões
-                        </p>
-                    </div>
-                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                        <div id="study-progress-bar" class="bg-emerald-500 h-full w-0 transition-all duration-500"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seção do Cronômetro Pomodoro Integrado -->
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700 relative">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-4 mb-4">
+        <!-- TAB 2: SCHEDULE -->
+        <section id="tab-schedule" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
                     <div>
-                        <h2 class="text-lg font-semibold flex items-center gap-2">
-                            <i class="fa-solid fa-stopwatch text-rose-500"></i> Timer de Estudo Pomodoro
-                        </h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Mantenha o foco em blocos de estudo intervalados.</p>
+                        <h2 class="text-xl font-semibold text-slate-900">Study Routine Settings</h2>
+                        <p class="text-sm text-slate-500 mt-1">Set how much time you can dedicate to studying each day.</p>
                     </div>
-                    <!-- Seletor de modo do timer -->
-                    <div class="flex bg-slate-100 dark:bg-slate-700/60 p-1 rounded-xl text-xs font-medium">
-                        <button id="pomo-mode-focus" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm transition">Foco (25m)</button>
-                        <button id="pomo-mode-short" class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 transition">Pausa Curta (5m)</button>
-                        <button id="pomo-mode-long" class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 transition">Pausa Longa (15m)</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                    <!-- Display do Timer -->
-                    <div class="flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                        <!-- Círculo Visual -->
-                        <div id="timer-display" class="text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 font-mono my-2">
-                            25:00
-                        </div>
-                        <span id="timer-status-label" class="text-xs uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400 mb-4">Pronto para começar</span>
-
-                        <!-- Botões do Timer -->
-                        <div class="flex items-center space-x-3">
-                            <button id="btn-pomo-start" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium text-sm transition shadow-md shadow-blue-500/20 flex items-center gap-2">
-                                <i class="fa-solid fa-play text-xs"></i> Iniciar
-                            </button>
-                            <button id="btn-pomo-pause" class="hidden px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium text-sm transition shadow-md flex items-center gap-2">
-                                <i class="fa-solid fa-pause text-xs"></i> Pausar
-                            </button>
-                            <button id="btn-pomo-reset" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl font-medium text-sm transition">
-                                <i class="fa-solid fa-rotate-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Vínculo da Matéria ao Timer -->
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Atribuir tempo de estudo à matéria:</label>
-                            <select id="pomo-subject-select" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <!-- Preenchido dinamicamente -->
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Anotação rápida / Tópico estudado:</label>
-                            <input type="text" id="pomo-task-note" placeholder="Ex: Resolução de exercícios da Pág. 42" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                        </div>
-                        <div class="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-100 dark:border-blue-900/50 text-xs text-blue-800 dark:text-blue-300 flex items-start gap-2">
-                            <i class="fa-solid fa-circle-info text-blue-500 mt-0.5"></i>
-                            <span>Ao concluir cada ciclo de foco, o tempo será creditado automaticamente no progresso da matéria selecionada!</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cronograma Inteligente Gerado -->
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-                    <div>
-                        <h2 class="text-lg font-semibold flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-days text-indigo-500"></i> Plano de Estudos Recomendado
-                        </h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Gerado automaticamente com base no peso, urgência de provas e dificuldade.</p>
-                    </div>
-                    <button id="btn-generate-schedule" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-xl transition shadow-sm flex items-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Recalcular Plano
+                    <button onclick="generateSchedule()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg transition flex items-center gap-2 self-start md:self-auto shadow-sm">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Auto Schedule
                     </button>
                 </div>
 
-                <!-- Grade/Lista de Blocos do Cronograma -->
-                <div id="schedule-container" class="space-y-3">
-                    <!-- Gerado dinamicamente -->
+                <!-- Availability inputs -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Weekdays Available</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="time-weekday" min="0.5" max="16" step="0.5" value="2" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-lg font-semibold text-slate-900 focus:ring-2 focus:ring-brand-500 outline-none">
+                            <span class="text-slate-600 text-sm font-medium">hrs/day</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Weekends Available</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="time-weekend" min="0.5" max="16" step="0.5" value="4" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-lg font-semibold text-slate-900 focus:ring-2 focus:ring-brand-500 outline-none">
+                            <span class="text-slate-600 text-sm font-medium">hrs/day</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Block Length</label>
+                        <select id="session-length" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-900 focus:ring-2 focus:ring-brand-500 outline-none bg-white">
+                            <option value="25">25 mins (Pomodoro)</option>
+                            <option value="45" selected>45 mins (Standard)</option>
+                            <option value="60">60 mins (Extended)</option>
+                        </select>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Short Break</label>
+                        <select id="break-length" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-900 focus:ring-2 focus:ring-brand-500 outline-none bg-white">
+                            <option value="5" selected>5 mins</option>
+                            <option value="10">10 mins</option>
+                            <option value="15">15 mins</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Schedule Output -->
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="calendar-days" class="w-5 h-5 text-brand-600"></i> Your Weekly Study Plan
+                    </h3>
+                    <div id="schedule-container" class="grid grid-cols-1 md:grid-cols-7 gap-3">
+                        <!-- Generated days will be rendered here -->
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Tópicos & Checklist de Revisão -->
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700">
-                <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
-                    <i class="fa-solid fa-list-check text-emerald-500"></i> Lista de Checklist de Tópicos
-                </h2>
+        <!-- TAB 3: POMODORO TIMER -->
+        <section id="tab-timer" class="tab-content hidden space-y-6">
+            <div class="max-w-xl mx-auto bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-center space-y-6">
+                <!-- Mode Switcher -->
+                <div class="inline-flex p-1 bg-slate-100 rounded-2xl gap-1">
+                    <button id="mode-focus" onclick="setTimerMode('focus')" class="px-4 py-2 rounded-xl text-sm font-semibold transition bg-white text-slate-900 shadow-sm">Focus</button>
+                    <button id="mode-short" onclick="setTimerMode('short')" class="px-4 py-2 rounded-xl text-sm font-semibold transition text-slate-600 hover:text-slate-900">Short Break</button>
+                    <button id="mode-long" onclick="setTimerMode('long')" class="px-4 py-2 rounded-xl text-sm font-semibold transition text-slate-600 hover:text-slate-900">Long Break</button>
+                </div>
 
-                <form id="form-checklist" class="flex gap-2 mb-4">
-                    <input type="text" id="checklist-input" placeholder="Adicionar tópico para revisar (ex: Ler capítulo 3 de Biologia)..." required class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Adicionar
+                <!-- Subject selector for active study tracking -->
+                <div class="text-left max-w-xs mx-auto">
+                    <label class="block text-xs font-medium text-slate-500 mb-1 text-center">Currently Studying:</label>
+                    <select id="timer-subject-select" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:ring-2 focus:ring-brand-500 outline-none bg-white">
+                        <option value="">-- Select Subject (Optional) --</option>
+                    </select>
+                </div>
+
+                <!-- Display Timer -->
+                <div class="relative py-6">
+                    <div id="timer-display" class="text-7xl font-extrabold tracking-tight text-slate-900 font-mono">25:00</div>
+                    <p id="timer-status" class="text-sm font-medium text-slate-500 mt-2">Ready to focus?</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex justify-center items-center gap-4">
+                    <button id="btn-timer-start" onclick="toggleTimer()" class="w-32 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-2xl transition duration-200 shadow-md flex items-center justify-center gap-2">
+                        <i id="timer-icon" data-lucide="play" class="w-5 h-5 fill-current"></i> <span id="timer-btn-text">Start</span>
                     </button>
-                </form>
+                    <button onclick="resetTimer()" class="p-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl transition">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
 
-                <div id="checklist-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
-                    <!-- Itens da lista -->
+        <!-- TAB 4: DASHBOARD & PROGRESS -->
+        <section id="tab-dashboard" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Stat Cards -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Total Focused Time</p>
+                        <h3 id="stat-total-time" class="text-2xl font-bold text-slate-900">0 mins</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+                        <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Completed Sessions</p>
+                        <h3 id="stat-sessions" class="text-2xl font-bold text-slate-900">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                        <i data-lucide="award" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Active Subjects</p>
+                        <h3 id="stat-subject-count" class="text-2xl font-bold text-slate-900">0</h3>
+                    </div>
                 </div>
             </div>
 
-            <!-- Seção de Dicas Rápidas de Métodos de Estudo -->
-            <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-800/80 p-5 rounded-2xl border border-amber-200/60 dark:border-slate-700">
-                <h3 class="font-bold text-amber-900 dark:text-amber-400 text-sm mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-lightbulb"></i> Técnicas para Potencializar seu Aprendizado
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div class="bg-white/80 dark:bg-slate-900/60 p-3 rounded-xl border border-amber-100 dark:border-slate-700">
-                        <span class="font-bold text-slate-800 dark:text-slate-200 block mb-1">1. Técnica Feynman</span>
-                        <p class="text-slate-600 dark:text-slate-400">Explique o conteúdo em voz alta em linguagem simples, como se estivesse ensinando uma criança. Isso expõe suas lacunas de conhecimento.</p>
-                    </div>
-                    <div class="bg-white/80 dark:bg-slate-900/60 p-3 rounded-xl border border-amber-100 dark:border-slate-700">
-                        <span class="font-bold text-slate-800 dark:text-slate-200 block mb-1">2. Repetição Espaçada</span>
-                        <p class="text-slate-600 dark:text-slate-400">Revise a matéria cadastrada 24h depois, depois em 3 dias e 7 dias. Combate a curva do esquecimento de forma eficaz.</p>
-                    </div>
+            <!-- Subject Breakdown -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-lg font-semibold text-slate-900">Subject Progress Breakdown</h3>
+                <div id="subject-progress-list" class="space-y-4">
+                    <!-- Progress bars rendered here -->
                 </div>
             </div>
+        </section>
 
+        <!-- TAB 5: STUDY TIPS -->
+        <section id="tab-tips" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3 text-brand-600">
+                        <i data-lucide="brain" class="w-6 h-6"></i>
+                        <h3 class="text-lg font-bold text-slate-900">Feynman Technique</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Explain a concept in simple words as if teaching it to a 10-year-old child. Whenever you encounter a gap or difficulty in explanation, revisit your notes to master that specific concept.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3 text-emerald-600">
+                        <i data-lucide="repeat" class="w-6 h-6"></i>
+                        <h3 class="text-lg font-bold text-slate-900">Spaced Repetition</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Review newly learned material at increasing intervals (e.g., 1 day, 3 days, 7 days, 14 days later). This moves information from short-term to long-term memory.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3 text-amber-600">
+                        <i data-lucide="timer" class="w-6 h-6"></i>
+                        <h3 class="text-lg font-bold text-slate-900">Pomodoro Technique</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Work with complete focus for 25 minutes, then take a short 5-minute break. After 4 cycles, take a longer 15-30 minute break to maintain peak focus and energy.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3 text-purple-600">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                        <h3 class="text-lg font-bold text-slate-900">Active Recall</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Instead of passively re-reading notes or highlighting textbooks, test your memory by answering flashcards, writing summary sheets, or taking practice quizzes without looking.
+                    </p>
+                </div>
+            </div>
         </section>
 
     </main>
 
-    <!-- Modal de Notificação Personalizada (Substitui alert) -->
-    <div id="toast-modal" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-        <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700">
-            <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400"></i>
-            <span id="toast-message" class="text-sm font-medium">Mensagem de aviso</span>
-        </div>
-    </div>
-
-    <!-- JavaScript Lógica da Aplicação -->
+    <!-- JavaScript Application Logic -->
     <script>
-        // --- ESTADO INICIAL E ARMAZENAMENTO ---
-        const STORAGE_KEY = 'estudoflow_data_v1';
-
-        // Palette de cores padrão para matérias
-        const COLOR_PALETTE = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b'];
-
-        let appData = {
-            hoursWeekday: 3,
-            hoursWeekend: 5,
+        // Data State
+        let state = {
             subjects: [],
-            exams: [],
-            checklist: [],
-            totalMinutesStudied: 0
+            totalTimeStudied: 0, // minutes
+            totalSessions: 0,
+            timer: {
+                mode: 'focus', // focus, short, long
+                duration: 25 * 60,
+                timeLeft: 25 * 60,
+                isRunning: false,
+                intervalId: null
+            }
         };
 
-        // Estado do Pomodoro
-        let pomodoroTimer = null;
-        let pomodoroSecondsLeft = 25 * 60;
-        let pomodoroTotalSeconds = 25 * 60;
-        let pomodoroMode = 'focus'; // focus, short, long
-        let isTimerRunning = false;
-
-        // --- INICIALIZAÇÃO DA PÁGINA ---
-        window.addEventListener('DOMContentLoaded', () => {
-            loadDataFromStorage();
-            initTheme();
-            renderColorPicker();
-            updateSubjectDropdowns();
-            renderSubjectsList();
-            renderExamsDashboard();
-            renderSchedule();
-            renderChecklist();
-            updateStatsUI();
-            setupEventListeners();
-        });
-
-        // --- PERSISTÊNCIA LOCALSTORAGE ---
-        function saveDataToStorage() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-            } catch (e) {
-                console.error("Erro ao salvar no localStorage", e);
-            }
-        }
-
-        function loadDataFromStorage() {
-            const saved = localStorage.getItem(STORAGE_KEY);
+        // Load data from localStorage on start
+        function loadState() {
+            const saved = localStorage.getItem('organize_study_data');
             if (saved) {
                 try {
-                    appData = JSON.parse(saved);
-                } catch (e) {
-                    console.error("Erro ao carregar dados salvos", e);
-                }
-            } else {
-                // Dados Iniciais de Exemplo para facilitar a primeira navegação do estudante
-                appData.subjects = [
-                    { id: '1', name: 'Matemática', difficulty: 4, weight: 3, color: '#3b82f6', minutesStudied: 120 },
-                    { id: '2', name: 'História', difficulty: 2, weight: 2, color: '#f59e0b', minutesStudied: 45 },
-                    { id: '3', name: 'Biologia', difficulty: 3, weight: 2, color: '#10b981', minutesStudied: 60 }
-                ];
-                
-                // Agendar prova de exemplo para daqui a 5 dias
-                const inFiveDays = new Date();
-                inFiveDays.setDate(inFiveDays.getDate() + 5);
-                const formattedDate = inFiveDays.toISOString().split('T')[0];
-
-                appData.exams = [
-                    { id: 'e1', subjectId: '1', date: formattedDate, title: 'Prova de Geometria e Álgebra' }
-                ];
-
-                appData.checklist = [
-                    { id: 'c1', text: 'Revisar fórmulas de trigonometria', done: false },
-                    { id: 'c2', text: 'Ler resumo sobre Revolução Industrial', done: true }
-                ];
-
-                appData.totalMinutesStudied = 225;
-                saveDataToStorage();
-            }
-
-            // Atualiza campos de inputs de horas
-            document.getElementById('input-hours-weekday').value = appData.hoursWeekday || 3;
-            document.getElementById('input-hours-weekend').value = appData.hoursWeekend || 5;
-        }
-
-        // --- MANIPULAÇÃO DE TEMA (DARK MODE) ---
-        function initTheme() {
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
+                    const parsed = JSON.parse(saved);
+                    state.subjects = parsed.subjects || [];
+                    state.totalTimeStudied = parsed.totalTimeStudied || 0;
+                    state.totalSessions = parsed.totalSessions || 0;
+                } catch(e) { console.error(e); }
             }
         }
 
-        document.getElementById('toggle-dark').addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.theme = isDark ? 'dark' : 'light';
-        });
-
-        // --- SELETOR DE CORES DAS MATÉRIAS ---
-        function renderColorPicker() {
-            const container = document.getElementById('color-picker-container');
-            container.innerHTML = '';
-            COLOR_PALETTE.forEach((color, index) => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = `w-7 h-7 rounded-full transition-transform border-2 ${index === 0 ? 'scale-110 border-slate-800 dark:border-white' : 'border-transparent hover:scale-105'}`;
-                btn.style.backgroundColor = color;
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('#color-picker-container button').forEach(b => {
-                        b.classList.remove('scale-110', 'border-slate-800', 'dark:border-white');
-                        b.classList.add('border-transparent');
-                    });
-                    btn.classList.remove('border-transparent');
-                    btn.classList.add('scale-110', 'border-slate-800', 'dark:border-white');
-                    document.getElementById('subj-color').value = color;
-                });
-                container.appendChild(btn);
-            });
+        function saveState() {
+            localStorage.setItem('organize_study_data', JSON.stringify({
+                subjects: state.subjects,
+                totalTimeStudied: state.totalTimeStudied,
+                totalSessions: state.totalSessions
+            }));
         }
 
-        // --- EVENT LISTENERS GERAIS ---
-        function setupEventListeners() {
-            // Formulário de Matéria
-            document.getElementById('form-subject').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('subj-name').value.trim();
-                const difficulty = parseInt(document.getElementById('subj-difficulty').value);
-                const weight = parseInt(document.getElementById('subj-weight').value);
-                const color = document.getElementById('subj-color').value;
+        // Navigation Switcher
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
 
-                if (!name) return;
-
-                const newSubj = {
-                    id: Date.now().toString(),
-                    name,
-                    difficulty,
-                    weight,
-                    color,
-                    minutesStudied: 0
-                };
-
-                appData.subjects.push(newSubj);
-                saveDataToStorage();
-
-                document.getElementById('subj-name').value = '';
-                showToast('Matéria cadastrada com sucesso!');
-                
-                updateSubjectDropdowns();
-                renderSubjectsList();
-                renderSchedule();
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+                btn.classList.add('text-slate-600');
             });
 
-            // Formulário de Prova
-            document.getElementById('form-exam').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const subjectId = document.getElementById('exam-subject-select').value;
-                const date = document.getElementById('exam-date').value;
-                const title = document.getElementById('exam-title').value.trim() || 'Avaliação';
-
-                if (!subjectId || !date) {
-                    showToast('Selecione a matéria e a data da prova.', 'warning');
-                    return;
-                }
-
-                const newExam = {
-                    id: Date.now().toString(),
-                    subjectId,
-                    date,
-                    title
-                };
-
-                appData.exams.push(newExam);
-                saveDataToStorage();
-
-                document.getElementById('exam-title').value = '';
-                showToast('Prova agendada com sucesso!');
-
-                renderExamsDashboard();
-                renderSchedule();
-            });
-
-            // Atualização de Horas Disponíveis
-            document.getElementById('btn-save-hours').addEventListener('click', () => {
-                const wDay = parseFloat(document.getElementById('input-hours-weekday').value) || 0;
-                const wEnd = parseFloat(document.getElementById('input-hours-weekend').value) || 0;
-                appData.hoursWeekday = wDay;
-                appData.hoursWeekend = wEnd;
-                saveDataToStorage();
-                showToast('Horas de disponibilidade atualizadas!');
-                renderSchedule();
-            });
-
-            // Formulário de Checklist
-            document.getElementById('form-checklist').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const input = document.getElementById('checklist-input');
-                const text = input.value.trim();
-                if (!text) return;
-
-                appData.checklist.push({
-                    id: Date.now().toString(),
-                    text: text,
-                    done: false
-                });
-
-                saveDataToStorage();
-                input.value = '';
-                renderChecklist();
-            });
-
-            // Botão Resetar Dados
-            document.getElementById('btn-reset-data').addEventListener('click', () => {
-                if (confirm('Tem certeza de que deseja apagar todas as matérias, provas e progresso?')) {
-                    localStorage.removeItem(STORAGE_KEY);
-                    location.reload();
-                }
-            });
-
-            // Botões Pomodoro
-            document.getElementById('btn-pomo-start').addEventListener('click', startPomodoro);
-            document.getElementById('btn-pomo-pause').addEventListener('click', pausePomodoro);
-            document.getElementById('btn-pomo-reset').addEventListener('click', resetPomodoro);
-
-            document.getElementById('pomo-mode-focus').addEventListener('click', () => setPomodoroMode('focus', 25));
-            document.getElementById('pomo-mode-short').addEventListener('click', () => setPomodoroMode('short', 5));
-            document.getElementById('pomo-mode-long').addEventListener('click', () => setPomodoroMode('long', 15));
-
-            document.getElementById('btn-generate-schedule').addEventListener('click', () => {
-                renderSchedule();
-                showToast('Plano de estudos recalculado!');
-            });
-        }
-
-        // --- ATUALIZAÇÃO DE DROPDOWNS ---
-        function updateSubjectDropdowns() {
-            const examSelect = document.getElementById('exam-subject-select');
-            const pomoSelect = document.getElementById('pomo-subject-select');
-
-            examSelect.innerHTML = '';
-            pomoSelect.innerHTML = '';
-
-            if (appData.subjects.length === 0) {
-                examSelect.innerHTML = '<option value="">Nenhuma matéria cadastrada</option>';
-                pomoSelect.innerHTML = '<option value="">Nenhuma matéria cadastrada</option>';
-                return;
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            if(activeNav) {
+                activeNav.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+                activeNav.classList.remove('text-slate-600');
             }
 
-            appData.subjects.forEach(subj => {
-                const opt1 = document.createElement('option');
-                opt1.value = subj.id;
-                opt1.textContent = subj.name;
-                examSelect.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = subj.id;
-                opt2.textContent = subj.name;
-                pomoSelect.appendChild(opt2);
-            });
+            if(tabName === 'dashboard') renderDashboard();
+            if(tabName === 'timer') updateTimerSubjectOptions();
+            if(tabName === 'schedule') generateSchedule();
         }
 
-        // --- RENDERIZAÇÃO DAS MATÉRIAS ---
-        function renderSubjectsList() {
-            const list = document.getElementById('subjects-list');
-            document.getElementById('subject-count').textContent = appData.subjects.length;
-            list.innerHTML = '';
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
 
-            if (appData.subjects.length === 0) {
-                list.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-4">Nenhuma matéria adicionada ainda.</p>';
-                return;
-            }
+        // Subjects Management
+        function handleAddSubject(e) {
+            e.preventDefault();
+            const name = document.getElementById('subject-name').value;
+            const examDate = document.getElementById('subject-exam-date').value;
+            const difficulty = parseInt(document.getElementById('subject-difficulty').value);
+            const weight = parseInt(document.getElementById('subject-weight').value);
+            const topicsRaw = document.getElementById('subject-topics').value;
 
-            appData.subjects.forEach(subj => {
-                const item = document.createElement('div');
-                item.className = 'flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-100 dark:border-slate-800 text-xs';
-                
-                const hoursStudied = (subj.minutesStudied / 60).toFixed(1);
+            const topics = topicsRaw ? topicsRaw.split(',').map(t => ({ title: t.trim(), done: false })).filter(t => t.title) : [];
 
-                item.innerHTML = `
-                    <div class="flex items-center space-x-2 overflow-hidden">
-                        <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${subj.color}"></span>
-                        <div class="truncate">
-                            <span class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(subj.name)}</span>
-                            <div class="text-[10px] text-slate-400">Dif: ${subj.difficulty}/5 • Peso: ${subj.weight}x</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 flex-shrink-0">
-                        <span class="bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-md text-[11px] font-mono">${hoursStudied}h</span>
-                        <button onclick="deleteSubject('${subj.id}')" class="text-slate-400 hover:text-rose-500 p-1 transition" title="Excluir">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                `;
-                list.appendChild(item);
-            });
+            const newSubject = {
+                id: Date.now().toString(),
+                name,
+                examDate,
+                difficulty,
+                weight,
+                topics,
+                minutesStudied: 0
+            };
+
+            state.subjects.push(newSubject);
+            saveState();
+            renderSubjects();
+            document.getElementById('subject-form').reset();
         }
 
         function deleteSubject(id) {
-            appData.subjects = appData.subjects.filter(s => s.id !== id);
-            appData.exams = appData.exams.filter(e => e.subjectId !== id);
-            saveDataToStorage();
-            
-            updateSubjectDropdowns();
-            renderSubjectsList();
-            renderExamsDashboard();
-            renderSchedule();
-            showToast('Matéria removida.');
+            state.subjects = state.subjects.filter(s => s.id !== id);
+            saveState();
+            renderSubjects();
         }
 
-        // --- DASHBOARD DE PROVAS ---
-        function renderExamsDashboard() {
-            const nextBadge = document.getElementById('next-exam-badge');
-            const nextTitle = document.getElementById('next-exam-title');
-            const nextSub = document.getElementById('next-exam-sub');
-            const nextDate = document.getElementById('next-exam-date');
+        function toggleTopic(subjectId, topicIndex) {
+            const subject = state.subjects.find(s => s.id === subjectId);
+            if(subject && subject.topics[topicIndex]) {
+                subject.topics[topicIndex].done = !subject.topics[topicIndex].done;
+                saveState();
+                renderSubjects();
+            }
+        }
 
-            if (appData.exams.length === 0) {
-                nextBadge.textContent = '--';
-                nextTitle.textContent = 'Nenhuma prova agendada';
-                nextSub.textContent = 'Cadastre provas no menu lateral para cálculo automático.';
-                nextDate.innerHTML = '<i class="fa-regular fa-clock mr-1.5"></i> Sem data cadastrada';
+        function daysUntil(dateString) {
+            const exam = new Date(dateString);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const diffTime = exam - today;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        function renderSubjects() {
+            const container = document.getElementById('subjects-container');
+            const countBadge = document.getElementById('subject-count');
+            countBadge.innerText = `${state.subjects.length} Subject${state.subjects.length !== 1 ? 's' : ''}`;
+
+            if(state.subjects.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
+                        <i data-lucide="book-open" class="w-10 h-10 mx-auto text-slate-400 mb-2"></i>
+                        <p class="font-medium">No subjects added yet.</p>
+                        <p class="text-xs text-slate-400 mt-1">Use the form on the left to register your first subject!</p>
+                    </div>
+                `;
+                lucide.createIcons();
                 return;
             }
 
-            // Ordena exames por data mais próxima
-            const today = new Date();
-            today.setHours(0,0,0,0);
+            container.innerHTML = state.subjects.map(sub => {
+                const days = daysUntil(sub.examDate);
+                let badgeClass = 'bg-blue-100 text-blue-800';
+                if(days <= 3) badgeClass = 'bg-red-100 text-red-800 animate-pulse';
+                else if(days <= 7) badgeClass = 'bg-amber-100 text-amber-800';
 
-            const sortedExams = [...appData.exams]
-                .map(exam => {
-                    const examDate = new Date(exam.date + 'T00:00:00');
-                    const diffDays = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
-                    return { ...exam, diffDays };
-                })
-                .sort((a, b) => a.diffDays - b.diffDays);
+                return `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-start gap-2">
+                                <h3 class="font-bold text-slate-900 text-lg leading-tight">${sub.name}</h3>
+                                <button onclick="deleteSubject('${sub.id}')" class="text-slate-400 hover:text-red-500 transition">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
 
-            const closest = sortedExams[0];
-            const subject = appData.subjects.find(s => s.id === closest.subjectId);
-            const subjName = subject ? subject.name : 'Matéria';
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                <span class="px-2.5 py-1 rounded-full font-semibold ${badgeClass}">
+                                    ${days < 0 ? 'Exam passed' : days === 0 ? 'Exam Today!' : `${days} days left`}
+                                </span>
+                                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-medium">
+                                    Diff: ${sub.difficulty}/5
+                                </span>
+                                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-medium">
+                                    Weight: ${sub.weight}
+                                </span>
+                            </div>
+                        </div>
 
-            nextTitle.textContent = `${subjName}: ${closest.title}`;
-            
-            const dateObj = new Date(closest.date + 'T00:00:00');
-            const formatted = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-            nextDate.innerHTML = `<i class="fa-regular fa-calendar mr-1.5"></i> ${formatted}`;
+                        ${sub.topics.length > 0 ? `
+                            <div class="space-y-1.5 pt-2 border-t border-slate-100">
+                                <p class="text-xs font-semibold text-slate-500 uppercase">Checklist Topics</p>
+                                <div class="space-y-1 max-h-32 overflow-y-auto pr-1">
+                                    ${sub.topics.map((t, idx) => `
+                                        <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:bg-slate-50 p-1 rounded transition">
+                                            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTopic('${sub.id}', ${idx})" class="rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+                                            <span class="${t.done ? 'line-through text-slate-400' : ''}">${t.title}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
 
-            if (closest.diffDays < 0) {
-                nextBadge.textContent = 'Realizada';
-                nextBadge.className = 'bg-slate-500/40 text-white backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold';
-                nextSub.textContent = 'Esta prova já passou.';
-            } else if (closest.diffDays === 0) {
-                nextBadge.textContent = 'HOJE!';
-                nextBadge.className = 'bg-rose-500 text-white backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold animate-pulse';
-                nextSub.textContent = 'Sua avaliação é hoje! Boa sorte!';
-            } else if (closest.diffDays === 1) {
-                nextBadge.textContent = 'Amanhã!';
-                nextBadge.className = 'bg-amber-500 text-white backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold';
-                nextSub.textContent = 'Faltam poucas horas. Faça revisões leves.';
-            } else {
-                nextBadge.textContent = `Faltam ${closest.diffDays} dias`;
-                nextBadge.className = 'bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold';
-                nextSub.textContent = `Prioridade no cronograma ativada para ${subjName}.`;
-            }
+                        <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                            <span>Time Studied:</span>
+                            <span class="font-bold text-brand-600">${sub.minutesStudied || 0} mins</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
         }
 
-        // --- ALGORITMO DO CRONOGRAMA AUTOMÁTICO ---
-        function renderSchedule() {
+        // Schedule Generator Logic
+        function generateSchedule() {
             const container = document.getElementById('schedule-container');
-            container.innerHTML = '';
+            const weekdayHours = parseFloat(document.getElementById('time-weekday').value) || 2;
+            const weekendHours = parseFloat(document.getElementById('time-weekend').value) || 4;
+            const sessionMins = parseInt(document.getElementById('session-length').value) || 45;
 
-            if (appData.subjects.length === 0) {
+            if(state.subjects.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-8 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">
-                        <i class="fa-solid fa-calendar-xmark text-3xl text-slate-300 dark:text-slate-600 mb-2"></i>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Cadastre suas matérias para gerar o plano de estudos diário.</p>
+                    <div class="col-span-full bg-slate-50 p-6 rounded-xl text-center text-slate-500 border border-slate-200">
+                        Please add at least one subject to generate your study schedule.
                     </div>
                 `;
                 return;
             }
 
-            // Cálculo dos pesos/prioridades de cada matéria
-            const today = new Date();
-            today.setHours(0,0,0,0);
+            // Calculate score priority for each subject
+            const scoredSubjects = state.subjects.map(s => {
+                const days = Math.max(1, daysUntil(s.examDate));
+                // Urgency factor + Difficulty factor + Weight factor
+                const score = (100 / days) + (s.difficulty * 2) + (s.weight * 3);
+                return { ...s, score };
+            }).sort((a, b) => b.score - a.score);
 
-            let subjectScores = appData.subjects.map(subj => {
-                // Fator Dificuldade (1 a 5)
-                let score = subj.difficulty * 2;
+            const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-                // Fator Peso (1 a 3)
-                score += subj.weight * 3;
+            container.innerHTML = daysOfWeek.map((day, dIdx) => {
+                const isWeekend = dIdx >= 5;
+                const availableMins = (isWeekend ? weekendHours : weekdayHours) * 60;
+                const sessionsCount = Math.floor(availableMins / sessionMins);
 
-                // Fator Proximidade da Prova
-                const subjExams = appData.exams.filter(e => e.subjectId === subj.id);
-                if (subjExams.length > 0) {
-                    let minDays = Infinity;
-                    subjExams.forEach(e => {
-                        const d = new Date(e.date + 'T00:00:00');
-                        const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
-                        if (diff >= 0 && diff < minDays) {
-                            minDays = diff;
-                        }
-                    });
-
-                    if (minDays <= 3) score += 15;
-                    else if (minDays <= 7) score += 10;
-                    else if (minDays <= 14) score += 5;
+                let daySessions = [];
+                for(let i = 0; i < sessionsCount; i++) {
+                    const subject = scoredSubjects[i % scoredSubjects.length];
+                    daySessions.push(subject.name);
                 }
 
-                return { ...subj, score };
-            });
-
-            const totalScore = subjectScores.reduce((acc, curr) => acc + curr.score, 0);
-
-            // Disponibilidade
-            const dailyHours = appData.hoursWeekday || 3;
-            const dailyMinutes = dailyHours * 60;
-
-            // Ordena matérias por pontuação de prioridade
-            subjectScores.sort((a, b) => b.score - a.score);
-
-            container.innerHTML = `
-                <div class="flex justify-between items-center text-xs text-slate-500 mb-2">
-                    <span>Distribuição sugerida para hoje (${dailyHours}h dispo.)</span>
-                    <span class="font-medium text-indigo-600 dark:text-indigo-400">${subjectScores.length} Matérias Ativas</span>
-                </div>
-            `;
-
-            subjectScores.forEach(item => {
-                const percentage = Math.round((item.score / totalScore) * 100);
-                const suggestedMinutes = Math.round((dailyMinutes * percentage) / 100);
-                const hours = Math.floor(suggestedMinutes / 60);
-                const mins = suggestedMinutes % 60;
-
-                let timeFormatted = '';
-                if (hours > 0) timeFormatted += `${hours}h `;
-                timeFormatted += `${mins}min`;
-
-                const block = document.createElement('div');
-                block.className = 'p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-100 dark:border-slate-800 transition hover:shadow-sm';
-
-                block.innerHTML = `
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-3 h-3 rounded-full" style="background-color: ${item.color}"></span>
-                            <span class="font-semibold text-sm text-slate-800 dark:text-slate-200">${escapeHtml(item.name)}</span>
+                return `
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="border-b border-slate-200 pb-2 mb-2 flex justify-between items-center">
+                                <span class="font-bold text-xs uppercase tracking-wider text-slate-700">${day}</span>
+                                <span class="text-[10px] text-slate-500 font-medium">${isWeekend ? weekendHours : weekdayHours}h</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                ${daySessions.length > 0 ? daySessions.map(s => `
+                                    <div class="p-2 bg-white rounded-lg border border-slate-200 shadow-2xs text-xs font-medium text-slate-800 flex items-center gap-1.5">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-brand-500"></div>
+                                        <span class="truncate">${s}</span>
+                                    </div>
+                                `).join('') : '<p class="text-[11px] text-slate-400 italic">Rest / Off</p>'}
+                            </div>
                         </div>
-                        <span class="text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-lg">
-                            <i class="fa-regular fa-clock mr-1"></i> ${timeFormatted}
-                        </span>
-                    </div>
-                    <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-500" style="width: ${percentage}%; background-color: ${item.color}"></div>
-                    </div>
-                    <div class="flex justify-between text-[11px] text-slate-400 mt-1.5">
-                        <span>Prioridade recomendada: ${percentage}%</span>
-                        <span>Dificuldade: ${item.difficulty}/5</span>
+                        <div class="text-[10px] text-slate-400 text-center font-medium pt-1">
+                            ${daySessions.length} sessions (${sessionMins}m)
+                        </div>
                     </div>
                 `;
-
-                container.appendChild(block);
-            });
+            }).join('');
         }
 
-        // --- TIMER POMODORO LÓGICA ---
-        function setPomodoroMode(mode, minutes) {
-            pausePomodoro();
-            pomodoroMode = mode;
-            pomodoroTotalSeconds = minutes * 60;
-            pomodoroSecondsLeft = pomodoroTotalSeconds;
+        // Pomodoro Timer Logic
+        function setTimerMode(mode) {
+            state.timer.mode = mode;
+            if(mode === 'focus') state.timer.duration = 25 * 60;
+            if(mode === 'short') state.timer.duration = 5 * 60;
+            if(mode === 'long') state.timer.duration = 15 * 60;
 
-            // UI updates
-            const btnFocus = document.getElementById('pomo-mode-focus');
-            const btnShort = document.getElementById('pomo-mode-short');
-            const btnLong = document.getElementById('pomo-mode-long');
-
-            [btnFocus, btnShort, btnLong].forEach(btn => {
-                btn.className = 'px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 transition';
+            // Reset tabs UI
+            ['focus', 'short', 'long'].forEach(m => {
+                const btn = document.getElementById(`mode-${m}`);
+                if(m === mode) {
+                    btn.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+                    btn.classList.remove('text-slate-600');
+                } else {
+                    btn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+                    btn.classList.add('text-slate-600');
+                }
             });
 
-            const activeBtn = mode === 'focus' ? btnFocus : (mode === 'short' ? btnShort : btnLong);
-            activeBtn.className = 'px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm transition font-semibold';
-
-            const label = document.getElementById('timer-status-label');
-            label.textContent = mode === 'focus' ? 'Modo Foco' : (mode === 'short' ? 'Pausa Curta' : 'Pausa Longa');
-
-            updateTimerDisplay();
+            resetTimer();
         }
 
         function updateTimerDisplay() {
-            const mins = Math.floor(pomodoroSecondsLeft / 60);
-            const secs = pomodoroSecondsLeft % 60;
-            const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-            
-            document.getElementById('timer-display').textContent = formatted;
-            document.title = isTimerRunning ? `(${formatted}) Organize Study routine` : 'Organize Study routine - Seu Organizer';
+            const mins = Math.floor(state.timer.timeLeft / 60);
+            const secs = state.timer.timeLeft % 60;
+            document.getElementById('timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        function startPomodoro() {
-            if (isTimerRunning) return;
-            isTimerRunning = true;
+        function toggleTimer() {
+            if(state.timer.isRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
 
-            document.getElementById('btn-pomo-start').classList.add('hidden');
-            document.getElementById('btn-pomo-pause').classList.remove('hidden');
+        function startTimer() {
+            state.timer.isRunning = true;
+            document.getElementById('timer-btn-text').innerText = 'Pause';
+            document.getElementById('timer-status').innerText = state.timer.mode === 'focus' ? 'Stay focused!' : 'Take a break!';
 
-            pomodoroTimer = setInterval(() => {
-                pomodoroSecondsLeft--;
+            state.timer.intervalId = setInterval(() => {
+                state.timer.timeLeft--;
                 updateTimerDisplay();
 
-                if (pomodoroSecondsLeft <= 0) {
-                    clearInterval(pomodoroTimer);
-                    isTimerRunning = false;
-                    playAlarmSound();
-                    onPomodoroComplete();
+                if(state.timer.timeLeft <= 0) {
+                    onTimerComplete();
                 }
             }, 1000);
         }
 
-        function pausePomodoro() {
-            if (!isTimerRunning) return;
-            clearInterval(pomodoroTimer);
-            isTimerRunning = false;
-
-            document.getElementById('btn-pomo-start').classList.remove('hidden');
-            document.getElementById('btn-pomo-pause').classList.add('hidden');
+        function pauseTimer() {
+            state.timer.isRunning = false;
+            clearInterval(state.timer.intervalId);
+            document.getElementById('timer-btn-text').innerText = 'Start';
+            document.getElementById('timer-status').innerText = 'Paused';
         }
 
-        function resetPomodoro() {
-            pausePomodoro();
-            pomodoroSecondsLeft = pomodoroTotalSeconds;
+        function resetTimer() {
+            pauseTimer();
+            state.timer.timeLeft = state.timer.duration;
             updateTimerDisplay();
+            document.getElementById('timer-status').innerText = 'Ready to focus?';
         }
 
-        function onPomodoroComplete() {
-            document.getElementById('btn-pomo-start').classList.remove('hidden');
-            document.getElementById('btn-pomo-pause').classList.add('hidden');
+        function onTimerComplete() {
+            pauseTimer();
+            playBeep();
 
-            if (pomodoroMode === 'focus') {
-                const subjectId = document.getElementById('pomo-subject-select').value;
-                const minutesAdded = Math.round(pomodoroTotalSeconds / 60);
+            if(state.timer.mode === 'focus') {
+                const minutesEarned = Math.round(state.timer.duration / 60);
+                state.totalTimeStudied += minutesEarned;
+                state.totalSessions += 1;
 
-                if (subjectId) {
-                    const subject = appData.subjects.find(s => s.id === subjectId);
-                    if (subject) {
-                        subject.minutesStudied = (subject.minutesStudied || 0) + minutesAdded;
-                        appData.totalMinutesStudied = (appData.totalMinutesStudied || 0) + minutesAdded;
-                        saveDataToStorage();
-                        
-                        renderSubjectsList();
-                        updateStatsUI();
-                        showToast(`Parabéns! ${minutesAdded} minutos computados para ${subject.name}!`);
+                // Credit time to selected subject
+                const selectedSubId = document.getElementById('timer-subject-select').value;
+                if(selectedSubId) {
+                    const sub = state.subjects.find(s => s.id === selectedSubId);
+                    if(sub) {
+                        sub.minutesStudied = (sub.minutesStudied || 0) + minutesEarned;
                     }
-                } else {
-                    showToast('Sessão concluída com sucesso!');
                 }
+
+                saveState();
+                alert('Great job! Focus session completed.');
             } else {
-                showToast('Pausa finalizada! Hora de voltar ao foco.');
+                alert('Break is over! Time to focus again.');
             }
 
-            resetPomodoro();
+            resetTimer();
         }
 
-        // Som de Alerta do Timer (Web Audio API)
-        function playAlarmSound() {
+        function updateTimerSubjectOptions() {
+            const select = document.getElementById('timer-subject-select');
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">-- Select Subject (Optional) --</option>' + 
+                state.subjects.map(s => `<option value="${s.id}" ${s.id === currentVal ? 'selected' : ''}>${s.name}</option>`).join('');
+        }
+
+        function playBeep() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // Note D5
-                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.2); // Note A5
-
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                osc.connect(ctx.destination);
                 osc.start();
-                osc.stop(ctx.currentTime + 0.8);
-            } catch (e) {
-                console.log("Audio não suportado ou bloqueado.");
-            }
+                osc.stop(ctx.currentTime + 0.5);
+            } catch(e) {}
         }
 
-        // --- STATS E DASHBOARD METRICS ---
-        function updateStatsUI() {
-            const totalMins = appData.totalMinutesStudied || 0;
-            const hours = Math.floor(totalMins / 60);
-            const mins = totalMins % 60;
+        // Dashboard Rendering
+        function renderDashboard() {
+            document.getElementById('stat-total-time').innerText = `${state.totalTimeStudied} mins`;
+            document.getElementById('stat-sessions').innerText = state.totalSessions;
+            document.getElementById('stat-subject-count').innerText = state.subjects.length;
 
-            document.getElementById('total-study-time').textContent = `${hours}h ${mins}m`;
+            const progressContainer = document.getElementById('subject-progress-list');
 
-            // Progresso em direção à meta diária de horas
-            const dailyGoalMins = (appData.hoursWeekday || 3) * 60;
-            const pct = Math.min(100, Math.round((totalMins / (dailyGoalMins * 5)) * 100)); // Meta semanal base
-            document.getElementById('study-progress-bar').style.width = `${pct}%`;
-        }
-
-        // --- CHECKLIST LÓGICA ---
-        function renderChecklist() {
-            const container = document.getElementById('checklist-container');
-            container.innerHTML = '';
-
-            if (appData.checklist.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-400 italic text-center py-2">Nenhum tópico na lista de revisão.</p>';
+            if(state.subjects.length === 0) {
+                progressContainer.innerHTML = '<p class="text-sm text-slate-500 italic">No subject data available.</p>';
                 return;
             }
 
-            appData.checklist.forEach(item => {
-                const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-2.5 rounded-xl border transition ${item.done ? 'bg-slate-50/50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800 opacity-60' : 'bg-slate-50 dark:bg-slate-900 border-slate-200/80 dark:border-slate-700'}`;
+            const maxTime = Math.max(...state.subjects.map(s => s.minutesStudied || 0), 1);
 
-                div.innerHTML = `
-                    <label class="flex items-center space-x-3 cursor-pointer text-xs flex-1 pr-2">
-                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklist('${item.id}')" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300">
-                        <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-200'}">${escapeHtml(item.text)}</span>
-                    </label>
-                    <button onclick="deleteChecklist('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1 text-xs">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+            progressContainer.innerHTML = state.subjects.map(sub => {
+                const percent = Math.round(((sub.minutesStudied || 0) / maxTime) * 100);
+                return `
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-semibold text-slate-700">
+                            <span>${sub.name}</span>
+                            <span>${sub.minutesStudied || 0} mins</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                            <div class="bg-brand-600 h-2.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
                 `;
-                container.appendChild(div);
-            });
+            }).join('');
         }
 
-        function toggleChecklist(id) {
-            const item = appData.checklist.find(c => c.id === id);
-            if (item) {
-                item.done = !item.done;
-                saveDataToStorage();
-                renderChecklist();
-            }
-        }
-
-        function deleteChecklist(id) {
-            appData.checklist = appData.checklist.filter(c => c.id !== id);
-            saveDataToStorage();
-            renderChecklist();
-        }
-
-        // --- UTILITÁRIOS ---
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast-modal');
-            const msgEl = document.getElementById('toast-message');
-            const iconEl = document.getElementById('toast-icon');
-
-            msgEl.textContent = message;
-
-            if (type === 'warning') {
-                iconEl.className = 'fa-solid fa-triangle-exclamation text-amber-400';
-            } else {
-                iconEl.className = 'fa-solid fa-circle-check text-emerald-400';
-            }
-
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/[&<>"']/g, function(m) {
-                return {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#039;'
-                }[m];
-            });
-        }
+        // Initialize on DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderSubjects();
+            updateTimerDisplay();
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
